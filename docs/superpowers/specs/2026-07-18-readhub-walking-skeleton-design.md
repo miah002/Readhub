@@ -36,7 +36,7 @@ Full schema is in the README's "State Management" section; this pass implements 
 
 - **teachers** — mirrors `auth.users` (id, display_name); RLS: row visible only to its own `auth.uid()`
 - **learners** — id, teacher_id (FK → teachers), name, grade, level (`beginning|developing|transitioning`), progress_pct, avatar_initials; RLS: only rows where `teacher_id = auth.uid()`
-- **passages** — id, title_en, title_fil, theme, grade, level, language, competency, quarter, minutes, body_en, body_fil, status (`published|pending|revision`), source (`teacher|ai`), created_by, created_at; RLS: `status = 'published'` readable by any authenticated teacher, full row visible to `created_by`
+- **passages** — id, title, theme, grade, level, language (`EN|FIL`), competency, quarter, minutes, emoji, cover_bg, body (`text[]`, one entry per paragraph), status (`published|pending|revision`), source (`teacher|ai`), created_by, created_at; RLS: `status = 'published'` readable by any authenticated teacher, full row visible to `created_by`. **Correction from initial draft:** the prototype (checked against `READHub_design_reference.dc.html` state) models each passage as a single-locale row — one `title`, one `body`, a `language` field, and the Repository's language filter chip — not bilingual `title_en`/`title_fil` columns as first drafted here. The README had flagged "EN/FIL variants or separate rows per locale" as an open modeling question; the prototype's actual behavior resolves it as separate rows per locale, so the schema follows that.
 - **assignments** — passage_id (FK → passages), learner_id (FK → learners), assigned_by, assigned_at; RLS: visible/writable only by the assigning teacher
 
 ## Screens in Scope
