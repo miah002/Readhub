@@ -1,4 +1,4 @@
-import { ComingSoon } from '@/components/coming-soon'
+import { ContentView } from '@/components/content-view'
 export default function ContentPage() {
-  return <ComingSoon title="Content Studio" />
+  return <ContentView />
 }

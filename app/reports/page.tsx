@@ -1,4 +1,4 @@
-import { ComingSoon } from '@/components/coming-soon'
+import { ReportsView } from '@/components/reports-view'
 export default function ReportsPage() {
-  return <ComingSoon title="Reports" />
+  return <ReportsView />
 }

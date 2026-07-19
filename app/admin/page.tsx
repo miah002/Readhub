@@ -1,4 +1,4 @@
-import { ComingSoon } from '@/components/coming-soon'
+import { AdminView } from '@/components/admin-view'
 export default function AdminPage() {
-  return <ComingSoon title="Admin Panel" />
+  return <AdminView />
 }

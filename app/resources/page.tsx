@@ -1,4 +1,4 @@
-import { ComingSoon } from '@/components/coming-soon'
+import { ResourcesView } from '@/components/resources-view'
 export default function ResourcesPage() {
-  return <ComingSoon title="Resource Library" />
+  return <ResourcesView />
 }
