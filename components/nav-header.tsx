@@ -32,7 +32,7 @@ export function NavHeader({ loggedIn, onLogout }: NavHeaderProps) {
     <header className="sticky top-0 z-40 bg-cream/90 backdrop-blur border-b-2 border-cardBorder">
       <div className="max-w-[1240px] mx-auto px-7 py-3.5 flex items-center gap-4">
         <Link href="/" className="flex items-center gap-3">
-          <span className="w-13 h-13 rounded-2xl bg-gradient-to-br from-[#FF8A5B] to-coral grid place-items-center text-2xl">📖</span>
+          <span className="w-[52px] h-[52px] rounded-2xl bg-gradient-to-br from-[#FF8A5B] to-coral grid place-items-center text-2xl">📖</span>
           <span className="font-display font-bold text-2xl text-coral">READHub</span>
         </Link>
         <nav className="ml-auto flex items-center gap-1 overflow-x-auto">
@@ -58,8 +58,11 @@ export function NavHeader({ loggedIn, onLogout }: NavHeaderProps) {
           {loggedIn ? (
             <Button variant="purple" onClick={onLogout}>{dict.header.logout}</Button>
           ) : (
-            <Link href="/login">
-              <Button variant="teal">{dict.header.login}</Button>
+            <Link
+              href="/login"
+              className="inline-block rounded-2xl px-6 py-3 font-display font-semibold cursor-pointer bg-teal text-white shadow-[0_4px_0_#1B8577]"
+            >
+              {dict.header.login}
             </Link>
           )}
         </div>
