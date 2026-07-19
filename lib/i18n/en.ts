@@ -26,7 +26,7 @@ export const en = {
       { title: 'Resource Library', desc: 'Worksheets, teacher guides and reading logs to support every session.' },
     ],
     steps: [
-      { title: 'Assess reading level', desc: `Record CRLA or Phil-IRI results to find each learner's instructional level.` },
+      { title: 'Assess reading level', desc: 'Record CRLA or Phil-IRI results to find each learner’s instructional level.' },
       { title: 'Assign a differentiated passage', desc: 'Match reading material to grade, level and competency.' },
       { title: 'Monitor & report progress', desc: 'Track growth and generate ARAL accomplishment reports.' },
     ],
