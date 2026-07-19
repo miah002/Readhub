@@ -28,7 +28,7 @@ export const fil = {
     steps: [
       { title: 'Suriin ang antas ng pagbasa', desc: 'Itala ang resulta ng CRLA o Phil-IRI para malaman ang instructional level ng bawat mag-aaral.' },
       { title: 'Magtakda ng naaangkop na babasahin', desc: 'Itugma ang babasahin sa baitang, antas at competency.' },
-      { title: 'Subaybayan at mag-ulat ng progreso', desc: 'Subaybayan ang paglaki at bumuo ng ulat ng ARAL accomplishment.' },
+      { title: 'Subaybayan at mag-ulat ng progreso', desc: 'Subaybayan ang paglago at bumuo ng ulat ng ARAL accomplishment.' },
     ],
   },
   login: {
