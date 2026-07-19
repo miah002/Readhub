@@ -12,6 +12,7 @@ export default function HomePage() {
   ]
   const featureIcons = ['📚', '🧒', '🤖', '✏️', '📈', '🗂️']
   const featureHrefs = ['/repository', '/profiles', '/content', '/assessments', '/reports', '/resources']
+  const featureTints = ['#FFE0D8', '#E3DEFF', '#FEEFCB', '#DFF6F1', '#FFD9CC', '#D6ECFF']
   const stepColors = ['#FFC64B', '#FF8A5B', '#29B6A4']
 
   return (
@@ -24,8 +25,8 @@ export default function HomePage() {
           <h1 className="font-display font-bold text-[56px] leading-[1.04] tracking-[-1.5px] text-ink">{dict.home.heroTitle}</h1>
           <p className="text-lg leading-relaxed text-inkSub my-6 max-w-[520px]">{dict.home.heroSub}</p>
           <div className="flex gap-3.5 flex-wrap">
-            <Link href="/repository"><Button variant="primary">{dict.home.startReading}</Button></Link>
-            <Link href="/login"><Button variant="secondary">{dict.home.teacherLogin}</Button></Link>
+            <Link href="/repository" className="inline-block rounded-2xl px-6 py-3 font-display font-semibold cursor-pointer bg-coral text-white shadow-[0_4px_0_#C13A28]">{dict.home.startReading}</Link>
+            <Link href="/login" className="inline-block rounded-2xl px-6 py-3 font-display font-semibold cursor-pointer bg-white text-ink border-2 border-cardBorder">{dict.home.teacherLogin}</Link>
           </div>
           <div className="flex gap-8 mt-10">
             {heroStats.map((s) => (
@@ -54,7 +55,7 @@ export default function HomePage() {
         <div className="grid grid-cols-3 gap-5">
           {dict.home.features.map((f, i) => (
             <Link key={f.title} href={featureHrefs[i]} className="bg-white border-2 border-cardBorder rounded-[22px] p-6 block">
-              <div className="w-14 h-14 rounded-2xl grid place-items-center text-2xl bg-[#FFE0D8]">{featureIcons[i]}</div>
+              <div className="w-14 h-14 rounded-2xl grid place-items-center text-2xl" style={{ background: featureTints[i] }}>{featureIcons[i]}</div>
               <div className="font-display font-semibold text-xl mt-4">{f.title}</div>
               <p className="text-sm text-inkSub leading-relaxed mt-2">{f.desc}</p>
             </Link>
