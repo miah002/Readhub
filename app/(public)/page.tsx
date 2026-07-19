@@ -1,7 +1,6 @@
 'use client'
 import Link from 'next/link'
 import { useLanguage } from '@/lib/i18n/language-context'
-import { Button } from '@/components/ui/button'
 
 export default function HomePage() {
   const { dict } = useLanguage()
