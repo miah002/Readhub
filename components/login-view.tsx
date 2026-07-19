@@ -1,5 +1,6 @@
 'use client'
 import { useState, type FormEvent } from 'react'
+import Link from 'next/link'
 import { useLanguage } from '@/lib/i18n/language-context'
 import { Button } from './ui/button'
 import { Card } from './ui/card'
@@ -28,7 +29,7 @@ export function LoginView({ onSubmit }: LoginViewProps) {
     <main className="max-w-[460px] mx-auto mt-16 mb-24 px-7">
       <Card>
         <div className="text-center mb-6">
-          <div className="w-15 h-15 rounded-2xl bg-gradient-to-br from-[#FF8A5B] to-coral grid place-items-center text-3xl mx-auto mb-4">📖</div>
+          <div className="w-[60px] h-[60px] rounded-2xl bg-gradient-to-br from-[#FF8A5B] to-coral grid place-items-center text-3xl mx-auto mb-4">📖</div>
           <h1 className="font-display font-bold text-2xl">{dict.login.title}</h1>
           <p className="text-sm text-inkSub mt-2">{dict.login.subtitle}</p>
         </div>
@@ -60,6 +61,9 @@ export function LoginView({ onSubmit }: LoginViewProps) {
           <a href="#" className="text-center text-sm font-extrabold">{dict.login.forgot}</a>
         </form>
       </Card>
+      <div className="text-center mt-6">
+        <Link href="/" className="text-sm font-extrabold">{dict.login.backHome}</Link>
+      </div>
     </main>
   )
 }
