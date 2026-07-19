@@ -78,7 +78,7 @@ export function ReaderView({ passage, learners, onConfirmAssign }: ReaderViewPro
 
           {bannerNames && bannerNames.length > 0 && (
             <div className="mt-4 bg-[#DFF6F1] text-[#1B8577] font-extrabold text-sm px-[18px] py-3.5 rounded-2xl">
-              {`✅ ${dict.reader.assignedTo} ${bannerNames.join(', ')}`}
+              ✅ <span>{dict.reader.assignedTo} {bannerNames.join(', ')}</span>
             </div>
           )}
         </div>
