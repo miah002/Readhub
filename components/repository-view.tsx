@@ -106,7 +106,7 @@ export function RepositoryView({ passages }: RepositoryViewProps) {
 
         <div>
           <div className="font-extrabold text-sm text-inkMuted mb-4">{visible.length} {dict.repository.passagesFound}</div>
-          <div className="grid grid-cols-3 gap-4.5">
+          <div className="grid grid-cols-3 gap-[18px]">
             {visible.map((p) => (
               <Link key={p.id} href={`/repository/${p.id}`} className="bg-white border-2 border-cardBorder rounded-[20px] overflow-hidden flex flex-col">
                 <div className="h-[120px] grid place-items-center text-5xl relative" style={{ background: p.cover_bg }}>
