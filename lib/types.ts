@@ -38,3 +38,16 @@ export interface Assignment {
   assigned_by: string
   assigned_at: string
 }
+
+export type ResourceTag = 'Guide' | 'Worksheet' | 'Video' | 'Reference'
+
+export interface Resource {
+  id: string
+  title: string
+  description: string
+  tag: ResourceTag
+  file_path: string
+  file_url: string
+  uploaded_by: string
+  created_at: string
+}

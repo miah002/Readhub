@@ -14,10 +14,15 @@ describe('isProtectedPath', () => {
     expect(isProtectedPath('/content')).toBe(true)
     expect(isProtectedPath('/content/new')).toBe(true)
   })
+  it('matches /resources and its subpaths', () => {
+    expect(isProtectedPath('/resources')).toBe(true)
+    expect(isProtectedPath('/resources/123')).toBe(true)
+  })
   it('does not match unrelated or prefix-lookalike paths', () => {
     expect(isProtectedPath('/')).toBe(false)
     expect(isProtectedPath('/login')).toBe(false)
     expect(isProtectedPath('/repositoryFoo')).toBe(false)
     expect(isProtectedPath('/contentFoo')).toBe(false)
+    expect(isProtectedPath('/resourcesFoo')).toBe(false)
   })
 })

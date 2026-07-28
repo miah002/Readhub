@@ -76,3 +76,40 @@ export async function createPassage(input: CreatePassageInput): Promise<{ error?
   })
   if (error) return { error: error.message }
 }
+
+const RESOURCE_ALLOWED_EXTENSIONS = ['pdf', 'doc', 'docx', 'png', 'jpg', 'jpeg', 'mp4']
+const RESOURCE_MAX_FILE_BYTES = 20 * 1024 * 1024
+
+export async function uploadResource(formData: FormData): Promise<{ error?: string } | void> {
+  const supabase = createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'Not authenticated' }
+
+  const title = String(formData.get('title') ?? '').trim()
+  const description = String(formData.get('description') ?? '').trim()
+  const tag = String(formData.get('tag') ?? '')
+  const file = formData.get('file')
+
+  if (!title || !description || !tag) return { error: 'Please fill in all fields.' }
+  if (!(file instanceof File) || file.size === 0) return { error: 'Please choose a file.' }
+  if (file.size > RESOURCE_MAX_FILE_BYTES) return { error: 'File is too large (max 20MB).' }
+
+  const ext = file.name.split('.').pop()?.toLowerCase() ?? ''
+  if (!RESOURCE_ALLOWED_EXTENSIONS.includes(ext)) return { error: 'Unsupported file type.' }
+
+  const path = `${user.id}/${Date.now()}-${file.name}`
+  const { error: uploadError } = await supabase.storage.from('resources').upload(path, file)
+  if (uploadError) return { error: uploadError.message }
+
+  const { data: { publicUrl } } = supabase.storage.from('resources').getPublicUrl(path)
+
+  const { error: insertError } = await supabase.from('resources').insert({
+    title,
+    description,
+    tag,
+    file_path: path,
+    file_url: publicUrl,
+    uploaded_by: user.id,
+  })
+  if (insertError) return { error: insertError.message }
+}
