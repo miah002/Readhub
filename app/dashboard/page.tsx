@@ -1,6 +1,7 @@
 import { DashboardView } from '@/components/dashboard-view'
 import { computeLevelBars } from '@/lib/dashboard/level-bars'
 import { createClient } from '@/lib/supabase/server'
+import { addLearner } from '@/lib/supabase/actions'
 import type { Learner } from '@/lib/types'
 
 export default async function DashboardPage() {
@@ -31,17 +32,15 @@ export default async function DashboardPage() {
     .eq('assigned_by', user!.id)
     .gte('assigned_at', weekAgo)
 
-  const en = (await import('@/lib/i18n/en')).en
-
   return (
     <DashboardView
-      dict={en}
       teacherName={teacher?.display_name ?? 'Teacher'}
       materialsCount={materialsCount ?? 0}
       learnerCount={learners.length}
       weekAssignments={weekAssignments ?? 0}
       levelBars={computeLevelBars(learners)}
       learners={learners}
+      onAddLearner={addLearner}
     />
   )
 }

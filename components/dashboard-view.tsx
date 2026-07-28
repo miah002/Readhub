@@ -1,22 +1,71 @@
+'use client'
+import { useState, type FormEvent } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Card } from './ui/card'
 import { LevelBadge } from './ui/level-badge'
+import { Button } from './ui/button'
+import { useLanguage } from '@/lib/i18n/language-context'
 import { LEVEL_COLOR } from '@/lib/level-colors'
-import type { Learner } from '@/lib/types'
+import type { AddLearnerInput } from '@/lib/supabase/actions'
+import type { Learner, Level } from '@/lib/types'
 import type { LevelBarDatum } from '@/lib/dashboard/level-bars'
-import type { Dictionary } from '@/lib/i18n/dictionary'
 
 interface DashboardViewProps {
-  dict: Dictionary
   teacherName: string
   materialsCount: number
   learnerCount: number
   weekAssignments: number
   levelBars: LevelBarDatum[]
   learners: (Learner & { passageCount: number })[]
+  onAddLearner: (input: AddLearnerInput) => Promise<{ error?: string } | void>
 }
 
-export function DashboardView({ dict, teacherName, materialsCount, learnerCount, weekAssignments, levelBars, learners }: DashboardViewProps) {
+const GRADES = ['G1', 'G2', 'G3', 'G4', 'G5', 'G6']
+const LEVELS: Level[] = ['beginning', 'developing', 'transitioning']
+
+const COPY = {
+  en: { addLearner: '+ Add Learner', name: 'Name', grade: 'Grade', level: 'Level', add: 'Add', cancel: 'Cancel', noLearners: 'No learners yet — add your first one.' },
+  fil: { addLearner: '+ Magdagdag ng Mag-aaral', name: 'Pangalan', grade: 'Baitang', level: 'Antas', add: 'Idagdag', cancel: 'Kanselahin', noLearners: 'Wala pang mag-aaral — magdagdag ng una.' },
+}
+
+function initialsOf(name: string): string {
+  const parts = name.trim().split(/\s+/).filter(Boolean)
+  if (parts.length === 0) return '??'
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase()
+  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
+}
+
+export function DashboardView({ teacherName, materialsCount, learnerCount, weekAssignments, levelBars, learners, onAddLearner }: DashboardViewProps) {
+  const { dict, lang } = useLanguage()
+  const router = useRouter()
+  const c = COPY[lang]
+
+  const [formOpen, setFormOpen] = useState(false)
+  const [name, setName] = useState('')
+  const [grade, setGrade] = useState(GRADES[0])
+  const [level, setLevel] = useState<Level>('beginning')
+  const [submitting, setSubmitting] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  async function handleSubmit(e: FormEvent) {
+    e.preventDefault()
+    if (!name.trim()) return
+    setSubmitting(true)
+    setError(null)
+    const result = await onAddLearner({ name: name.trim(), grade, level, avatarInitials: initialsOf(name) })
+    setSubmitting(false)
+    if (result?.error) {
+      setError(result.error)
+      return
+    }
+    setName('')
+    setGrade(GRADES[0])
+    setLevel('beginning')
+    setFormOpen(false)
+    router.refresh()
+  }
+
   return (
     <main className="max-w-[1240px] mx-auto px-7 py-9">
       <div className="flex items-end justify-between flex-wrap gap-4 mb-7">
@@ -66,8 +115,49 @@ export function DashboardView({ dict, teacherName, materialsCount, learnerCount,
         </Card>
 
         <Card>
-          <h2 className="font-display font-semibold text-xl mb-4">{dict.dashboard.myLearners}</h2>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="font-display font-semibold text-xl">{dict.dashboard.myLearners}</h2>
+            <button type="button" onClick={() => setFormOpen((v) => !v)} className="text-xs font-extrabold text-coral">
+              {c.addLearner}
+            </button>
+          </div>
+
+          {formOpen && (
+            <form onSubmit={handleSubmit} className="flex flex-col gap-2.5 mb-4 bg-cardAlt border-2 border-cardBorder rounded-2xl p-4">
+              <input
+                type="text"
+                required
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder={c.name}
+                className="px-3.5 py-2.5 rounded-xl border-2 border-cardBorder text-sm bg-white"
+              />
+              <div className="flex gap-2.5">
+                <select value={grade} onChange={(e) => setGrade(e.target.value)} className="flex-1 px-3.5 py-2.5 rounded-xl border-2 border-cardBorder text-sm bg-white">
+                  {GRADES.map((g) => (
+                    <option key={g} value={g}>{g}</option>
+                  ))}
+                </select>
+                <select value={level} onChange={(e) => setLevel(e.target.value as Level)} className="flex-1 px-3.5 py-2.5 rounded-xl border-2 border-cardBorder text-sm bg-white">
+                  {LEVELS.map((lv) => (
+                    <option key={lv} value={lv}>{dict.levels[lv]}</option>
+                  ))}
+                </select>
+              </div>
+              {error && <p role="alert" className="text-coral text-xs font-bold">{error}</p>}
+              <div className="flex gap-2.5">
+                <Button type="submit" variant="teal" disabled={submitting} className="flex-1 text-sm px-4 py-2.5">
+                  {c.add}
+                </Button>
+                <Button type="button" variant="ghost" onClick={() => setFormOpen(false)} className="text-sm px-4 py-2.5">
+                  {c.cancel}
+                </Button>
+              </div>
+            </form>
+          )}
+
           <div className="flex flex-col gap-3">
+            {learners.length === 0 && <p className="text-sm text-inkMuted font-bold text-center py-4">{c.noLearners}</p>}
             {learners.map((l) => (
               <div key={l.id} className="flex items-center gap-3 p-3 rounded-2xl bg-cardAlt">
                 <div className="w-10 h-10 rounded-xl grid place-items-center font-display font-bold text-white" style={{ background: LEVEL_COLOR[l.level] }}>
